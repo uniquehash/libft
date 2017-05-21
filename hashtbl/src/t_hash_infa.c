@@ -10,20 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hotrace.h"
+#include "hashtbl.h"
 
 t_hash			*t_hash_build(int bucket_size)
 {
 	t_hash			*hash;
-	static	t_node	*map[200000];
+	static	t_node	*map[HASHTBL_SIZE];
 	int				i;
 
 	i = -1;
 	hash = NULL;
 	if ((hash = (t_hash*)malloc(sizeof(t_hash))) == 0)
-		helper_error("Error: failed to mallocate for t_hash\n");
+		hash_error("Error: failed to mallocate for t_hash\n");
 	hash->map = map;
-	hash->size = bucket_size;
+	hash->size = HASHTBL_SIZE;
 	return (hash);
 }
 
@@ -38,7 +38,7 @@ unsigned long	t_hash_hashing(unsigned char *key, int bucket_size)
 	return (hash % bucket_size);
 }
 
-void			t_hash_del(t_hash **hash, int bucket_size)
+void			t_hash_del(t_hash **hash)
 {
 	int i;
 
@@ -47,7 +47,7 @@ void			t_hash_del(t_hash **hash, int bucket_size)
 	{
 		if (*hash)
 		{
-			while (++i < bucket_size)
+			while (++i < (*hash)->size)
 				t_node_del(&(((*hash)->map)[i]));
 			free(*hash);
 			*hash = NULL;

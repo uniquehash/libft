@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hotrace.h"
+#include "hashtbl.h"
 
 t_node	*t_node_build(char *key, char *value)
 {
@@ -20,7 +20,7 @@ t_node	*t_node_build(char *key, char *value)
 	if (key && value)
 	{
 		if ((node = (t_node*)malloc(sizeof(t_node))) == 0)
-			helper_error("Error: failed to mallocate for t_node\n");
+			hash_error("Error: failed to mallocate for t_node\n");
 		node->key = key;
 		node->value = value;
 		node->nxt = NULL;
@@ -71,8 +71,8 @@ void	t_node_del(t_node **node)
 		{
 			if ((*node)->nxt)
 				t_node_del(&((*node)->nxt));
-			ft_strdel(&((*node)->key));
-			ft_strdel(&((*node)->value));
+			hash_strdel(&((*node)->key));
+			hash_strdel(&((*node)->value));
 			(*node)->nxt = NULL;
 			free(*node);
 			*node = NULL;

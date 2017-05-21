@@ -10,7 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = hotrace
+NAME = hashtble.a
+
+RUN = a.out
 
 S_PATH = src/
 B_PATH = build/
@@ -18,25 +20,13 @@ H_PATH = include/
 LIBFT_PATH = libft
 PRINTF_PATH = ft_printf
 
-FILES = hotrace_helper hotrace_helper1
+FILES = generic_helper
 
 FILES += t_hash_infa t_hash_helper
 
 FILES += t_node_infa
 
-FILES += get_next_line gnl_helper gnl_helper1
-
-FILES += 
-
-FILES += 
-
-FILES += 
-
-FILES += 
-
-FILES += 
-
-FILES += main 
+# FILES += main 
 
 OBJ = $(addprefix $(B_PATH), $(addsuffix .o, $(FILES)))
 
@@ -52,40 +42,29 @@ endif
 
 .PHONY: all fclean clean run leak
 
-all : $(NAME)
 
-$(NAME) : $(B_PATH) $(OBJ)
-	@echo ""
-	gcc $(FLAGS) -o $(NAME) $(OBJ)
+$(NAME): build $(OBJ)
+	@ar rc $(NAME) $(OBJ)
 
-run : fclean $(B_PATH) $(OBJ)
-	@echo "\x1b[31mrun is turned on\x1b[36m"
-	gcc $(FLAGS) -o $(NAME) $(OBJ) && printf "\x1b[37m" && ./$(NAME)
+run : fclean build $(OBJ)
+	gcc $(FLAGS) -o $(RUN) $(OBJ) -I ./include && ./$(RUN)
 
-dev : fclean $(B_PATH) $(OBJ)
-	gcc $(DEVF) -o $(NAME) $(OBJ)
+leak : build $(OBJ)
+	gcc $(LEAK_F) -o $(RUN) $(OBJ) -I ./include && ./$(RUN)
 
-leak : $(B_PATH) $(OBJ)
-	@echo "\x1b[31malloc wrap is turned on\x1b[36m"
-	gcc $(LEAKF) -o $(NAME) $(OBJ)
+dev : fclean build $(OBJ)
+	gcc $(DEV_FLAGS) -o $(RUN) $(OBJ) -I ./include && ./$(RUN)
 
-leaks: re
-	@ osascript -e 'tell application "iTerm2" to activate' -e '\
-		tell application "System Events" to tell process "iTerm2" to keystroke "D" using command down' -e 'tell application "System Events" to tell process "iTerm" to keystroke "while true ;do clear; leaks $(NAME); sleep 2 ;done"' -e 'tell application "System Events" to tell process "iTerm" to key code 52'
+$(B_PATH)%.o: $(S_PATH)%.c		
+	@gcc -c $< -o $@ -I ./include
 
-$(B_PATH) :
-	@printf "\x1b[32m \nbuilding objects.....\n\x1b[33m"
-	@mkdir build
+build : 
+	@mkdir -p build
 
-$(B_PATH)%.o : $(S_PATH)%.c
-	gcc -c $< -o $@ -I ./$(LIBFT_PATH)/$(H_PATH) -I ./$(H_PATH) -I ./$(PRINTF_PATH)/$(H_PATH)
-	
-clean : 
+clean :
 	@rm -rf build
 
 fclean : clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(RUN)
 
 re : fclean all
-
-

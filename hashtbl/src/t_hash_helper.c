@@ -10,15 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hotrace.h"
+#include "hashtbl.h"
 
-void	t_hash_print(t_hash *hash, int bucket_size)
+void	hash_error(char *message)
+{
+	write(1, message, hash_strlen(message));
+	exit(1);
+}
+
+void	t_hash_print(t_hash *hash)
 {
 	int	i;
 
 	i = -1;
 	if (hash)
-		while (++i < bucket_size)
+		while (++i < hash->size)
 			t_node_print(hash->map[i]);
 	else
 		printf("(null)\n");
@@ -57,7 +63,7 @@ char	*t_hash_get(t_hash *hash, char *key)
 	node = hash->map[index];
 	while (node)
 	{
-		if (sse_strcmp(key, node->key) == 0)
+		if (hash_strcmp(key, node->key) == 0)
 			return (node->value);
 		else
 			node = node->nxt;
@@ -78,7 +84,7 @@ int		t_hash_update(t_hash *hash, char *key, char *value)
 	node = hash->map[index];
 	while (node)
 	{
-		if (sse_strcmp(key, node->key) == 0)
+		if (hash_strcmp(key, node->key) == 0)
 		{
 			free(node->value);
 			node->value = value;

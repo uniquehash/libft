@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hotrace_helper.c                                   :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obelange <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,43 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hotrace.h"
+#include "hashtbl.h"
+#include "unistd.h"
 
-char	*ft_strncat(char *s1, char *s2, size_t n)
+int	main(void)
 {
-	size_t	end;
-	size_t	i;
+	t_hash	*hash;
+	t_node	*node;
+	char	*line;
+	char	*key;
+	char	*value;
+	char	*value1;
+	char	*ret;
+	
+	node = NULL;
+	hash = t_hash_build(HASHTBL_SIZE);
 
-	i = 0;
-	end = ft_strlen(s1);
-	while (s2[i] && i < n)
-	{
-		s1[end + i] = s2[i];
-		if (s2[i] == 0)
-			s2--;
-		i++;
-	}
-	s1[end + i] = 0;
-	return (s1);
-}
+	key = hash_strdup("this_key_baby");
+	value = hash_strdup("tat_value");
+	value1 = hash_strdup("thit_log");
+	t_hash_add(hash, key, value);
+	
+	printf("key: %s, value: %s\n", "this_key_baby", t_hash_get(hash, "this_key_baby"));
 
-char	*ft_strncpy(char *dst, char *src, size_t len)
-{
-	size_t i;
+	t_hash_update(hash, key, value1);
+	printf("key: %s, value: %s\n", "this_key_baby", t_hash_get(hash, "this_key_baby"));
 
-	i = 0;
-	if (dst && src)
-	{
-		while (src[i] && i < len)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		while (i < len)
-		{
-			dst[i] = '\0';
-			i++;
-		}
-	}
-	return (dst);
+	// t_hash_print(hash);
+	// t_node_print_chain(hash->map[t_hash_hashing((unsigned char*)key, hash->size)]);
+	t_hash_del(&hash);
 }

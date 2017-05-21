@@ -10,9 +10,76 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "hotrace.h"
+#include "hashtbl.h"
 
-char	*ft_strnew(size_t size)
+int		hash_strlen(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		i++;
+	}
+	return (i);
+}
+
+void	hash_strdel(char **as)
+{
+	if (as)
+	{
+		if (*as)
+		{
+			free(*as);
+			*as = 0;
+		}
+	}
+}
+
+int		hash_strcmp(const char *s1, const char *s2)
+{
+	int				i;
+	unsigned char	c1;
+	unsigned char	c2;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		c1 = (unsigned char)s1[i];
+		c2 = (unsigned char)s2[i];
+		if (c1 > c2)
+			return (c1 - c2);
+		else if (c1 < c2)
+			return (c1 - c2);
+		i++;
+	}
+	c1 = (unsigned char)s1[i];
+	c2 = (unsigned char)s2[i];
+	if (c1 > c2)
+		return (c1 - c2);
+	else if (c1 < c2)
+		return (c1 - c2);
+	return (0);
+}
+
+char	*hash_strdup(char *s1)
+{
+	size_t	i;
+	char	*nstr;
+	int		x;
+
+	i = hash_strlen(s1);
+	NULL_GUARD(nstr = hash_strnew(i));
+	x = 0;
+	while (s1[x])
+	{
+		nstr[x] = s1[x];
+		x++;
+	}
+	return (nstr);
+}
+
+char	*hash_strnew(size_t size)
 {
 	char	*str;
 	size_t	i;
@@ -31,28 +98,3 @@ char	*ft_strnew(size_t size)
 	else
 		return (0);
 }
-
-int		sse_strcmp(const char *s1, const char *s2)
-{
-	int	result;
-	size_t idx;
-
-	__asm__("mov $-16, %1\n"
-			"cmploop: add $16, %1\n"
-			"movdqu (%1,%2), %%xmm1\n"
-			"movdqu (%1,%3), %%xmm0\n"
-			"pcmpistri $24, %%xmm0, %%xmm1\n"
-			"jnbe cmploop\n"
-			"jnc equal\n"
-			"add %%rcx, %1\n"
-			"mov $1, %0\n"
-			"jmp done\n"
-			"equal: xor %0, %0\n"
-			"done:nop"
-			: "=r"(result), "+r"(idx)
-			: "r"(s1), "r"(s2)
-			: "rcx", "cc", "xmm0", "xmm1");
-	if (result)
-		return (s2[idx] - s1[idx]);
-	return (0);
-}	
