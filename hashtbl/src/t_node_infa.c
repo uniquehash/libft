@@ -1,0 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   t_node_infa.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: obelange <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/10/27 09:43:04 by obelange          #+#    #+#             */
+/*   Updated: 2016/10/27 09:43:07 by obelange         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "hotrace.h"
+
+t_node	*t_node_build(char *key, char *value)
+{
+	t_node	*node;
+
+	node = NULL;
+	if (key && value)
+	{
+		if ((node = (t_node*)malloc(sizeof(t_node))) == 0)
+			helper_error("Error: failed to mallocate for t_node\n");
+		node->key = key;
+		node->value = value;
+		node->nxt = NULL;
+	}
+	return (node);
+}
+
+void	t_node_print(t_node *node)
+{
+	if (node)
+	{
+		printf("key: %s\n", node->key);
+		printf("value: %s\n", node->value);
+		printf("nxt: %p\n", node->nxt);
+	}
+	else
+		printf("(null)\n");
+}
+
+void	t_node_print_chain(t_node *node)
+{
+	t_node	*tmp;
+
+	if (node)
+	{
+		tmp = node;
+		if (!tmp->nxt)
+			t_node_print(tmp);
+		while (tmp->nxt)
+		{
+			t_node_print(tmp);
+			tmp = tmp->nxt;
+		}
+	}
+	else
+	{
+		printf("(null)\n");
+	}
+}
+
+void	t_node_del(t_node **node)
+{
+	t_node	*tmp;
+
+	if (node)
+	{
+		if (*node)
+		{
+			if ((*node)->nxt)
+				t_node_del(&((*node)->nxt));
+			ft_strdel(&((*node)->key));
+			ft_strdel(&((*node)->value));
+			(*node)->nxt = NULL;
+			free(*node);
+			*node = NULL;
+		}
+	}
+}
