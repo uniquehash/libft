@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: obelange <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/09/30 14:47:57 by obelange          #+#    #+#             */
-/*   Updated: 2016/09/30 14:47:57 by obelange         ###   ########.fr       */
+/*   Created: 2016/10/27 09:43:16 by obelange          #+#    #+#             */
+/*   Updated: 2016/10/27 09:43:18 by obelange         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "libft.h"
+#include "stdio.h"
+#include <fcntl.h>
 
-char	*ft_printf_strcpy(char *dst, char const *src)
+int	main(void)
 {
-	size_t i;
+	char	*line;
+	int 	fd;
 
-	i = -1;
-	while (src[++i])
-		dst[i] = src[i];
-	dst[i] = '\0';
-	return (dst);
+	line = NULL;
+	// while (1){
+	fd = open("Makefile", O_RDONLY);
+	// fd = open("test_input", O_RDONLY);
+	// fd = 0;
+	while(get_next_line(fd, &line) > 0)
+	{
+		printf("%s\n",line);
+		ft_strdel(&line);		
+	}
+	// sleep(100);
+// }
 }
+
+
+

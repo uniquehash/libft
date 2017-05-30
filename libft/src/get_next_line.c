@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "stdio.h"
 
 static	char	*read_til_line(const int fd, char **line, size_t *back)
 {
@@ -23,11 +24,10 @@ static	char	*read_til_line(const int fd, char **line, size_t *back)
 	tmp = NULL;
 	while (ft_strchr(buff, '\n') == NULL && ret > 0)
 	{
+		bzero(buff, sizeof(char) * BUFF_SIZE + 1);		
 		ret = read(fd, buff, BUFF_SIZE);
-		tmp = ft_fstrmcat(tmp, buff);
-		bzero(buff, sizeof(char) * BUFF_SIZE + 1);
+		tmp = ft_fstrmcat(tmp, buff);		
 	}
-	tmp = ft_fstrmcat(tmp, buff);
 	if (*tmp == 0 && ret == 0)
 		*back = 0;
 	else
@@ -63,10 +63,10 @@ int				get_next_line(const int fd, char **line)
 		return (1);
 	}
 	else
-	{
-		remain = read_til_line(fd, line, &index);
+	{		
+		remain = ft_fstrmcatf(remain, read_til_line(fd, line, &index));
 		if (index == 0)
-		{
+		{			
 			ft_strdel(&remain);
 			return (index);
 		}

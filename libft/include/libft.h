@@ -15,7 +15,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
-# define BUFF_SIZE 1024
+# define BUFF_SIZE 4
 # define FGUARD(INPUT) if ((INPUT) == -1) return (-1)
 # define FILEGUARD(INPUT) if ((INPUT) == -1) return (-1)
 # define NULL_GUARD(INPUT) if ((INPUT) == NULL) return (NULL)
@@ -125,6 +125,4 @@ char			*ft_strmcatf(char const *s1, char *s2);
 int				ft_strsearch_ov(char const *s, char const *c);
 
 int				get_next_line(const int fd, char **line);
-
-
 #endif

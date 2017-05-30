@@ -41,7 +41,9 @@ ft_strlist_build ft_strlist_del ft_strlist_findindex ft_strlist_len \
 ft_strlist_minus ft_strlist_print ft_strlist_remove ft_strmcatf \
 ft_strsearch_ov
 
-RUN_FILES += $(FILES) main
+# RUN_FILES += $(FILES) main
+
+RUN_FILES += $(FILES) main_gnl
 
 OBJ = $(addprefix $(B_PATH), $(addsuffix .o, $(FILES)))
 ROBJ = $(addprefix $(B_PATH), $(addsuffix .o, $(RUN_FILES)))
