@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "stdio.h"
 
 static	char	*read_til_line(const int fd, char **line, size_t *back)
 {
